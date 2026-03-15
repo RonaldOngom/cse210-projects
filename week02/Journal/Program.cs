@@ -4,71 +4,68 @@ class Program
 {
     static void Main(string[] args)
     {
-        // Ask the user for their grade percentage
-        Console.Write("Enter your grade percentage: ");
-        string userInput = Console.ReadLine();
-        int grade = int.Parse(userInput);
+        Journal journal = new Journal();
+        PromptGenerator promptGenerator = new PromptGenerator();
 
-        // Variable to store the letter grade
-        string letter = "";
+        bool exit = false;
 
-        // Determine the letter grade
-        if (grade >= 90)
+        while (!exit)
         {
-            letter = "A";
-        }
-        else if (grade >= 80)
-        {
-            letter = "B";
-        }
-        else if (grade >= 70)
-        {
-            letter = "C";
-        }
-        else if (grade >= 60)
-        {
-            letter = "D";
-        }
-        else
-        {
-            letter = "F";
-        }
+            Console.WriteLine("\n--- Journal Program Menu ---");
+            Console.WriteLine("1. Write a new entry");
+            Console.WriteLine("2. Display journal");
+            Console.WriteLine("3. Save journal to file");
+            Console.WriteLine("4. Load journal from file");
+            Console.WriteLine("5. Add a custom prompt (creative feature)");
+            Console.WriteLine("6. Exit");
+            Console.Write("Select an option (1-6): ");
 
-        // Determine the + or - sign
-        string sign = "";
-        int lastDigit = grade % 10;
+            string choice = Console.ReadLine();
 
-        if (lastDigit >= 7)
-        {
-            sign = "+";
-        }
-        else if (lastDigit < 3)
-        {
-            sign = "-";
-        }
+            switch (choice)
+            {
+                case "1":
+                    string prompt = promptGenerator.GetRandomPrompt();
+                    Console.WriteLine($"\nPrompt: {prompt}");
+                    Console.Write("Your Response: ");
+                    string response = Console.ReadLine();
+                    string date = DateTime.Now.ToString("yyyy-MM-dd");
+                    journal.AddEntry(new Entry(date, prompt, response));
+                    Console.WriteLine("Entry added successfully!");
+                    break;
 
-        // Handle special cases: no A+ and no F+/F-
-        if (letter == "A" && sign == "+")
-        {
-            sign = "";
-        }
+                case "2":
+                    journal.DisplayEntries();
+                    break;
 
-        if (letter == "F")
-        {
-            sign = "";
-        }
+                case "3":
+                    Console.Write("Enter filename to save journal: ");
+                    string saveFile = Console.ReadLine();
+                    journal.SaveToFile(saveFile);
+                    break;
 
-        // Print the final grade
-        Console.WriteLine($"Your letter grade is: {letter}{sign}");
+                case "4":
+                    Console.Write("Enter filename to load journal: ");
+                    string loadFile = Console.ReadLine();
+                    journal.LoadFromFile(loadFile);
+                    break;
 
-        // Determine if the student passed
-        if (grade >= 70)
-        {
-            Console.WriteLine("Congratulations! You passed the course 🎉");
-        }
-        else
-        {
-            Console.WriteLine("Don't give up! Keep trying and you'll do better next time 💪");
+                case "5":
+                    Console.Write("Enter your custom prompt: ");
+                    string customPrompt = Console.ReadLine();
+                    promptGenerator.AddCustomPrompt(customPrompt);
+                    Console.WriteLine("Custom prompt added!");
+                    break;
+
+                case "6":
+                    exit = true;
+                    Console.WriteLine("Exiting program. Goodbye!");
+                    break;
+
+                default:
+                    Console.WriteLine("Invalid choice. Please enter a number between 1 and 6.");
+                    break;
+            }
         }
     }
 }
