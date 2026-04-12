@@ -1,9 +1,15 @@
-using System;
+/*
+CREATIVITY:
+This program exceeds requirements by adding a leveling system.
+The user levels up every 1000 points and receives a celebratory message,
+which increases motivation and gamification beyond the base requirements.
+*/
 
 class Program
 {
-    static void Main(string[] args)
+    static void Main()
     {
-        Console.WriteLine("Hello World! This is the EternalQuest Project.");
+        GoalManager manager = new();
+        manager.Start();
     }
 }
